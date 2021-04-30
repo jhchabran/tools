@@ -682,6 +682,50 @@ func (r *runner) Highlight(t *testing.T, src span.Span, locations []span.Span) {
 	}
 }
 
+func (r *runner) Tooltip(t *testing.T, src span.Span, text string) {
+	ctx := r.ctx
+	_, srcRng, err := spanToRange(r.data, src)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fh, err := r.snapshot.GetFile(r.ctx, src.URI())
+	if err != nil {
+		t.Fatal(err)
+	}
+	hover, err := source.Hover(ctx, r.snapshot, fh, srcRng.Start)
+	if err != nil {
+		t.Errorf("tooltip failed for %s: %v", src.URI(), err)
+	}
+	if text == "" {
+		if hover != nil {
+			t.Errorf("want nil, got %v\n", hover)
+		}
+	} else {
+		if hover == nil {
+			t.Fatalf("want hover result to not be nil")
+		}
+		if got := hover.Contents.Value; got != text {
+			t.Errorf("want %v, got %v\n", got, text)
+		}
+		want := src.Start().Line() - 1
+		if got := hover.Range.Start.Line; int(got) != want {
+			t.Errorf("want start line %v, got %v\n", got, want)
+		}
+		want = src.Start().Column() - 1
+		if got := hover.Range.Start.Character; int(got) != want {
+			t.Errorf("want start col %v, got %v\n", got, want)
+		}
+		want = src.End().Line() - 1
+		if got := hover.Range.End.Line; int(got) != want {
+			t.Errorf("want end line %v, got %v\n", got, want)
+		}
+		want = src.End().Column() - 1
+		if got := hover.Range.End.Character; int(got) != want {
+			t.Errorf("want end col %v, got %v\n", got, want)
+		}
+	}
+}
+
 func (r *runner) References(t *testing.T, src span.Span, itemList []span.Span) {
 	ctx := r.ctx
 	_, srcRng, err := spanToRange(r.data, src)

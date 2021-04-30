@@ -74,6 +74,7 @@ type SymbolInformation map[span.Span]protocol.SymbolInformation
 type WorkspaceSymbols map[WorkspaceSymbolsTestType]map[span.URI][]string
 type Signatures map[span.Span]*protocol.SignatureHelp
 type Links map[span.URI][]Link
+type Tooltips map[span.Span]string
 
 type Data struct {
 	Config                   packages.Config
@@ -107,6 +108,7 @@ type Data struct {
 	WorkspaceSymbols         WorkspaceSymbols
 	Signatures               Signatures
 	Links                    Links
+	Tooltips                 Tooltips
 
 	t         testing.TB
 	fragments map[string]string
@@ -147,6 +149,7 @@ type Tests interface {
 	WorkspaceSymbols(*testing.T, span.URI, string, WorkspaceSymbolsTestType)
 	SignatureHelp(*testing.T, span.Span, *protocol.SignatureHelp)
 	Link(*testing.T, span.URI, []Link)
+	Tooltip(*testing.T, span.Span, string)
 }
 
 type Definition struct {
@@ -293,6 +296,7 @@ func load(t testing.TB, mode string, dir string) *Data {
 		WorkspaceSymbols:         make(WorkspaceSymbols),
 		Signatures:               make(Signatures),
 		Links:                    make(Links),
+		Tooltips:                 make(Tooltips),
 
 		t:         t,
 		dir:       dir,
@@ -436,6 +440,7 @@ func load(t testing.TB, mode string, dir string) *Data {
 		"implementations": datum.collectImplementations,
 		"typdef":          datum.collectTypeDefinitions,
 		"hover":           datum.collectHoverDefinitions,
+		"hovertooltip":    datum.collectHoverTooltips,
 		"highlight":       datum.collectHighlights,
 		"refs":            datum.collectReferences,
 		"rename":          datum.collectRenames,
@@ -686,6 +691,16 @@ func Run(t *testing.T, tests Tests, data *Data) {
 			t.Run(SpanName(pos), func(t *testing.T) {
 				t.Helper()
 				tests.Highlight(t, pos, locations)
+			})
+		}
+	})
+
+	t.Run("Tooltip", func(t *testing.T) {
+		t.Helper()
+		for pos, info := range data.Tooltips {
+			t.Run(SpanName(pos), func(t *testing.T) {
+				t.Helper()
+				tests.Tooltip(t, pos, info)
 			})
 		}
 	})
@@ -1160,6 +1175,10 @@ func (data *Data) collectHoverDefinitions(src, target span.Span) {
 		Def:       target,
 		OnlyHover: true,
 	}
+}
+
+func (data *Data) collectHoverTooltips(src span.Span, expected string) {
+	data.Tooltips[src] = expected
 }
 
 func (data *Data) collectTypeDefinitions(src, target span.Span) {

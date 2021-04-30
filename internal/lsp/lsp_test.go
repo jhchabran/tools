@@ -776,6 +776,56 @@ func (r *runner) Highlight(t *testing.T, src span.Span, locations []span.Span) {
 	}
 }
 
+func (r *runner) Tooltip(t *testing.T, src span.Span, text string) {
+	m, err := r.data.Mapper(src.URI())
+	if err != nil {
+		t.Fatal(err)
+	}
+	loc, err := m.Location(src)
+	if err != nil {
+		t.Fatalf("failed for %v", err)
+	}
+	tdpp := protocol.TextDocumentPositionParams{
+		TextDocument: protocol.TextDocumentIdentifier{URI: loc.URI},
+		Position:     loc.Range.Start,
+	}
+	params := &protocol.HoverParams{
+		TextDocumentPositionParams: tdpp,
+	}
+	hover, err := r.server.Hover(r.ctx, params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if text == "" {
+		if hover != nil {
+			t.Errorf("want nil, got %v\n", hover)
+		}
+	} else {
+		if hover == nil {
+			t.Fatalf("want hover result to not be nil")
+		}
+		if got := hover.Contents.Value; got != text {
+			t.Errorf("want %v, got %v\n", text, got)
+		}
+		want := src.Start().Line() - 1
+		if got := hover.Range.Start.Line; int(got) != want {
+			t.Errorf("want start line %v, got %v\n", got, want)
+		}
+		want = src.Start().Column() - 1
+		if got := hover.Range.Start.Character; int(got) != want {
+			t.Errorf("want start col %v, got %v\n", got, want)
+		}
+		want = src.End().Line() - 1
+		if got := hover.Range.End.Line; int(got) != want {
+			t.Errorf("want end line %v, got %v\n", got, want)
+		}
+		want = src.End().Column() - 1
+		if got := hover.Range.End.Character; int(got) != want {
+			t.Errorf("want end col %v, got %v\n", got, want)
+		}
+	}
+}
+
 func (r *runner) References(t *testing.T, src span.Span, itemList []span.Span) {
 	sm, err := r.data.Mapper(src.URI())
 	if err != nil {
