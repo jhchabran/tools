@@ -23,9 +23,10 @@ import (
 	"sync"
 	"time"
 
+	"os/exec"
+
 	"golang.org/x/mod/modfile"
 	"golang.org/x/mod/semver"
-	exec "golang.org/x/sys/execabs"
 	"golang.org/x/tools/gopls/internal/govulncheck"
 	"golang.org/x/tools/gopls/internal/lsp/protocol"
 	"golang.org/x/tools/gopls/internal/lsp/source"

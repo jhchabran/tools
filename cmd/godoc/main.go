@@ -38,7 +38,7 @@ import (
 	"runtime"
 	"strings"
 
-	exec "golang.org/x/sys/execabs"
+	"os/exec"
 
 	"golang.org/x/tools/godoc"
 	"golang.org/x/tools/godoc/static"

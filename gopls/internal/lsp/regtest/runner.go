@@ -21,7 +21,7 @@ import (
 	"testing"
 	"time"
 
-	exec "golang.org/x/sys/execabs"
+	"os/exec"
 
 	"golang.org/x/tools/gopls/internal/lsp/cache"
 	"golang.org/x/tools/gopls/internal/lsp/debug"

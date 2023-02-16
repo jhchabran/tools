@@ -85,7 +85,7 @@ import (
 	"strconv"
 	"strings"
 
-	exec "golang.org/x/sys/execabs"
+	"os/exec"
 )
 
 // flags

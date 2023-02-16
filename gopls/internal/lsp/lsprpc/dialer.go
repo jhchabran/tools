@@ -12,7 +12,8 @@ import (
 	"os"
 	"time"
 
-	exec "golang.org/x/sys/execabs"
+	"os/exec"
+
 	"golang.org/x/tools/internal/event"
 )
 

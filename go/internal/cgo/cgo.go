@@ -64,7 +64,7 @@ import (
 	"regexp"
 	"strings"
 
-	exec "golang.org/x/sys/execabs"
+	"os/exec"
 )
 
 // ProcessFiles invokes the cgo preprocessor on bp.CgoFiles, parses

@@ -22,7 +22,8 @@ import (
 	"sync"
 	"unicode"
 
-	exec "golang.org/x/sys/execabs"
+	"os/exec"
+
 	"golang.org/x/tools/go/internal/packagesdriver"
 	"golang.org/x/tools/internal/gocommand"
 	"golang.org/x/tools/internal/packagesinternal"

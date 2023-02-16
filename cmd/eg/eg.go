@@ -20,7 +20,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	exec "golang.org/x/sys/execabs"
+	"os/exec"
+
 	"golang.org/x/tools/go/packages"
 	"golang.org/x/tools/refactor/eg"
 )

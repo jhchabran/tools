@@ -22,7 +22,7 @@ import (
 	"strconv"
 	"strings"
 
-	exec "golang.org/x/sys/execabs"
+	"os/exec"
 
 	"golang.org/x/mod/modfile"
 	"golang.org/x/mod/semver"

@@ -18,7 +18,7 @@ import (
 	"strconv"
 	"syscall"
 
-	exec "golang.org/x/sys/execabs"
+	"os/exec"
 )
 
 func init() {

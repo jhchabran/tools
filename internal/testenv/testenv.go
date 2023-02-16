@@ -21,7 +21,7 @@ import (
 
 	"golang.org/x/tools/internal/goroot"
 
-	exec "golang.org/x/sys/execabs"
+	"os/exec"
 )
 
 // packageMainIsDevel reports whether the module containing package main

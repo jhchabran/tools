@@ -91,7 +91,7 @@ import (
 	"strings"
 	"time"
 
-	exec "golang.org/x/sys/execabs"
+	"os/exec"
 )
 
 var (

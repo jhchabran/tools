@@ -20,9 +20,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	exec "golang.org/x/sys/execabs"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"regexp"
 	"runtime"
