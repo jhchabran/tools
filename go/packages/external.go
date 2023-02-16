@@ -60,8 +60,8 @@ func findExternalDriver(cfg *Config) driver {
 	if tool == "" {
 		var err error
 		tool, err = exec.LookPath("gopackagesdriver")
-		println("HERE lookpath")
 		if err != nil {
+			println("HERE lookpath")
 			return nil
 		}
 	}
