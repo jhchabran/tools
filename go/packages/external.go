@@ -60,6 +60,7 @@ func findExternalDriver(cfg *Config) driver {
 	if tool == "" {
 		var err error
 		tool, err = exec.LookPath("gopackagesdriver")
+		println("HERE lookpath")
 		if err != nil {
 			return nil
 		}
@@ -86,6 +87,7 @@ func findExternalDriver(cfg *Config) driver {
 		cmd.Stderr = stderr
 
 		if err := cmd.Run(); err != nil {
+			println("HERE cmdRun")
 			return nil, fmt.Errorf("%v: %v: %s", tool, err, cmd.Stderr)
 		}
 		if len(stderr.Bytes()) != 0 && os.Getenv("GOPACKAGESPRINTDRIVERERRORS") != "" {

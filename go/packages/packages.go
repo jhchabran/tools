@@ -257,7 +257,6 @@ type driverResponse struct {
 // proceeding with further analysis. The PrintErrors function is
 // provided for convenient display of all errors.
 func Load(cfg *Config, patterns ...string) ([]*Package, error) {
-	panic("here")
 	l := newLoader(cfg)
 	response, err := defaultDriver(&l.Config, patterns...)
 	if err != nil {
